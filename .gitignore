@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pipenv environment files
+Pipfile.lock
+
+# Python cache files
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Temporary and log files
+*.log
+*.tmp
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# MacOS system files
+.DS_Store
+
+# Output files (optional)
+*.out
+*.annotated.*
+
+# Environment variables
+.env
+
+# Test directory that I don't want commited
+.test/

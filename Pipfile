@@ -16,6 +16,8 @@ unstructured = "*"
 unstructured-client = "*"
 langchain-unstructured = "*"
 nltk = "*"
+langchain-core = "*"
+langgraph = "*"
 
 [requires]
 python_version = "3.13"

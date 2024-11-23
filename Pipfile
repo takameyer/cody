@@ -12,6 +12,10 @@ click = "*"
 langchain-community = "*"
 langchain-openai = "*"
 pyinstaller = "*"
+unstructured = "*"
+unstructured-client = "*"
+langchain-unstructured = "*"
+nltk = "*"
 
 [requires]
 python_version = "3.13"

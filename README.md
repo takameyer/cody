@@ -1,6 +1,6 @@
 # Cody
 
-This Python application uses LangChain to interact with OpenAI's GPT-4o API. It loads a project directory as a RAG reference into context and opens up a chat dialogue to have discussions.
+This Python application uses LangChain to interact with OpenAI's GPT-4o LLM. It loads a project directory as a RAG reference into context and opens up a chat dialogue to have discussions.
 
 ## Features
 - **Contextual Project Reference**: LLM is able to speak directly about a given project.

@@ -9,7 +9,7 @@ import os
 # Define a new graph
 
 
-def open_chat(project_path, prompt):
+def open_chat(project_path, prompt, glob_list):
     def call_model(state: MessagesState):
         prompt_template = PromptTemplate(
             template=(
@@ -27,7 +27,8 @@ def open_chat(project_path, prompt):
         temperature=0,
         openai_api_key=os.getenv("OPENAI_API_KEY"),
     )
-    loader = DirectoryLoader(project_path, glob="**/*[!png|jpg|gif]")
+    print(project_path, glob_list)
+    loader = DirectoryLoader(project_path, glob=glob_list)
     docs = loader.load()
 
     # Define the (single) node in the graph

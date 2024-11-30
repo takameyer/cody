@@ -1,0 +1,5 @@
+project_path: "/Users/andrew.meyer/Projects/cody/"
+prompt: "You are an expert python developer."
+glob: 
+  - "**/*.py"
+  - "**/*.html"

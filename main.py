@@ -12,64 +12,59 @@ import yaml
 @click.option(
     "--prompt",
     type=click.STRING,
-    help="Provide the intial prompt for the LLM.  For example: You are an expert Python developer",
+    help="Provide the initial prompt for the LLM. For example: You are an expert Python developer",
 )
 @click.option(
     "--glob",
+    multiple=True,  # Allow multiple glob patterns
     type=click.STRING,
-    help="Provide a glob string what files to match.  For example: **/*.[python|md|html|css]",
+    help="Provide glob strings to match files. Can be used multiple times. For example: **/*.py **/*.md",
 )
 @click.option(
     "--config",
     type=click.Path(file_okay=True, path_type=Path, exists=True, readable=True),
-    help="Configuration YAML that contains the project_dir and the prompt",
+    help="Configuration YAML that contains the project_dir, prompt, and glob patterns",
 )
 @click.pass_context
 def main(ctx, project_path, prompt, glob, config):
     """
     Open a chat with an LLM to discuss a project, given an initial prompt and the path of the project.
-
     \b
     USAGE:
-      cody ./project/dir PROJECT_DIR [--prompt PROMPT] [--glob GLOB]
+      cody ./project/dir PROJECT_DIR [--prompt PROMPT] [--glob PATTERN1] [--glob PATTERN2]
       cody --config ./path/to/config.yml
-
     ARGUMENTS:
       PROJECT_PATH     Path to the project being discussed.
-
     OPTIONS:
       --prompt    Initial prompt for the LLM
-      --glob      Glob string to determine which files to match
+      --glob      Glob string(s) to determine which files to match (can be used multiple times)
       --config    CONFIG_PATH
                   Path to a config that contains the prompt and project_dir
     Example config.yml:
       project_dir: ./project/dir
       prompt: "You are an expert Python developer"
-      glob: "**/*.[python|md|html|css]
+      glob:
+        - "**/*.py"
+        - "**/*.md"
+        - "**/*.html"
     """
-
     if config:
-        config_stream = open(config, "r")
-        config_yaml = yaml.safe_load(config_stream)
+        with open(config, "r") as config_stream:
+            config_yaml = yaml.safe_load(config_stream)
 
         # Check for required keys in the config
-        if "project_path" not in config_yaml:
-            click.echo("Missing required 'project_path' in config file.", err=True)
-            click.echo(ctx.get_help())
-            ctx.exit(1)
+        required_keys = ["project_path", "prompt", "glob"]
+        for key in required_keys:
+            if key not in config_yaml:
+                click.echo(f"Missing required '{key}' in config file.", err=True)
+                click.echo(ctx.get_help())
+                ctx.exit(1)
 
-        if "prompt" not in config_yaml:
-            click.echo("Missing required 'prompt' in config file.", err=True)
-            click.echo(ctx.get_help())
-            ctx.exit(1)
-        if "glob" not in config_yaml:
-            click.echo("Missing required 'glob' in config file.", err=True)
-            click.echo(ctx.get_help())
-            ctx.exit(1)
         prompt = config_yaml["prompt"]
         project_path = config_yaml["project_path"]
         glob = config_yaml["glob"]
 
+    # Validate inputs
     if not project_path:
         click.echo("Error: Missing required argument for PROJECT_PATH.", err=True)
         click.echo(ctx.get_help())
@@ -85,7 +80,10 @@ def main(ctx, project_path, prompt, glob, config):
         click.echo(ctx.get_help())
         ctx.exit(1)
 
-    open_chat(project_path, prompt, glob_list=glob)
+    # Convert glob to a list if it's not already
+    glob_list = list(glob) if isinstance(glob, (list, tuple)) else list(glob)
+
+    open_chat(project_path, prompt, glob_list=glob_list)
 
 
 if __name__ == "__main__":
